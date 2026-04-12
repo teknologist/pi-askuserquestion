@@ -96,8 +96,10 @@ Answers are returned as:
 | `Enter`          | Multi-select (with selection) | Confirm                    |
 | `Space` or `Tab` | "Type something..." row       | Open inline editor         |
 | `Enter`          | Editor (with text)            | Save and close             |
+| `Shift+Enter`    | Editor                        | Insert newline             |
 | `Enter`          | Editor (empty)                | Clear saved text and close |
 | `Esc`            | Editor                        | Discard and close          |
+| `Ctrl+C`         | Anywhere                      | Cancel entire question     |
 | `←` `→`          | Multi-question tab bar        | Switch tabs                |
 | `Enter`          | Submit tab (all answered)     | Submit all answers         |
 | `Esc`            | Anywhere                      | Cancel entire question     |
@@ -109,6 +111,7 @@ Answers are returned as:
 - **Cursor ≠ selection** — moving the cursor does not select an answer. Only `Enter` (single-select) or `Space` (multi-select) records a choice.
 - **Auto-confirm on `→`** — navigating away from a multi-select question with selections auto-confirms it. Single-select requires explicit `Enter`.
 - **Free-text + checkboxes** — on multi-select questions, you can check boxes AND type custom text. Both are included in the answer, joined by `, `.
+- **tmux / modified Enter** — in the inline editor, `Shift+Enter` is treated as newline, not submit. Plain `Enter` saves/closes the editor.
 - **Non-interactive sessions** — if called outside an interactive session (e.g. print mode), the tool disables itself for the rest of the session so the LLM won't retry.
 - **Undo free-text** — re-open the editor, clear the text, press `Enter`. The saved answer is cleared.
 - **Change your mind** — navigate back to any tab and re-answer. Confirmed state updates automatically.
@@ -123,7 +126,7 @@ src/
   component.ts      — Interactive TUI component (pi-tui, no pi runtime needed)
   index.ts          — Extension entry point (registers the tool)
 tests/
-  component.test.ts — 108 unit tests (vitest)
+  component.test.ts — 110+ unit tests (vitest)
 ```
 
 ---

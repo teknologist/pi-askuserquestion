@@ -219,6 +219,13 @@ class AskUserQuestionComponent implements Component {
   constructor(questions: Question[], tui: TUILike, theme: Theme, done: (result: Result | null) => void)
 ```
 
+### Input handling notes
+
+- The questionnaire is mounted through `ctx.ui.custom(...)`, so while it is active the component owns key handling.
+- `Ctrl+C` is handled explicitly as a global cancel path so the user is never trapped in the flow.
+- In inline edit mode, plain `Enter` saves/closes the editor, while `Shift+Enter` must fall through to `Editor.handleInput(data)` so it inserts a newline.
+- This distinction matters in tmux, where modified Enter keys can otherwise be misinterpreted as plain submit events.
+
 `Editor` is created once and its text swapped when navigating between questions:
 
 ```typescript
