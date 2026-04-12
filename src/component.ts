@@ -499,6 +499,12 @@ export class AskUserQuestionComponent implements Component {
     // Guard: once done has been called, ignore all further input
     if (this._resolved) return;
 
+    // Always provide an immediate escape hatch from the custom questionnaire UI.
+    if (matchesKey(data, Key.ctrl("c"))) {
+      this.cancel();
+      return;
+    }
+
     // ── Submit tab ─────────────────────────────────────────────────────────────
     // Check Submit tab FIRST — states[activeTab] is undefined when on Submit tab
     if (!this.isSingle && this.activeTab === this.questions.length) {
@@ -535,7 +541,10 @@ export class AskUserQuestionComponent implements Component {
         this.tui.requestRender();
         return;
       }
-      if (matchesKey(data, Key.enter)) {
+      if (
+        matchesKey(data, Key.enter) &&
+        !matchesKey(data, Key.shift("enter"))
+      ) {
         const text = this.editor.getText().trim();
         if (text) {
           this.exitEditMode(true);

@@ -42,10 +42,12 @@ const INPUT = {
   left: "\x1b[D",
   right: "\x1b[C",
   enter: "\r",
+  shiftEnter: "\x1b[13;2u",
   escape: "\x1b",
   tab: "\t",
   shiftTab: "\x1b[Z",
   space: " ",
+  ctrlC: "\x03",
 } as const;
 
 // ── Fixtures ──────────────────────────────────────────────────────────────────
@@ -367,6 +369,15 @@ describe("handleInput — cancellation", () => {
     c.handleInput(INPUT.escape);
     expect(count).toBe(1);
   });
+
+  it("resolves null on Ctrl+C", () => {
+    let resolved: Result | null | undefined;
+    const c = make([singleSelect], (r) => {
+      resolved = r;
+    });
+    c.handleInput(INPUT.ctrlC);
+    expect(resolved).toBeNull();
+  });
 });
 
 // ── handleInput — multi-select ────────────────────────────────────────────────
@@ -565,6 +576,28 @@ describe("handleInput — free-text mode", () => {
     expect(resolved).not.toBeNull();
     expect(resolved?.cancelled).toBe(false);
     expect(resolved?.answers["Which database should we use?"]).toBe("hello");
+  });
+
+  it("Shift+Enter in edit mode inserts a newline instead of submitting", () => {
+    let resolved: Result | null = null;
+    const c = make([singleSelect], (r) => {
+      resolved = r;
+    });
+    for (let i = 0; i < 10; i++) c.handleInput(INPUT.down);
+    c.handleInput(INPUT.space); // open editor
+    for (const ch of "hello") c.handleInput(ch);
+    c.handleInput(INPUT.shiftEnter);
+    for (const ch of "world") c.handleInput(ch);
+
+    expect(resolved).toBeNull();
+
+    const lines = c.render(80);
+    expect(lines.some((l) => l.includes("✎"))).toBe(true);
+
+    c.handleInput(INPUT.enter);
+    expect(resolved?.answers["Which database should we use?"]).toBe(
+      "hello\nworld",
+    );
   });
 });
 
