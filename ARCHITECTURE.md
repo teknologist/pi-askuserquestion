@@ -28,7 +28,7 @@ pi-askuserquestion/
 
 | File | Imports | Reason |
 |------|---------|--------|
-| `schema.ts` | `@sinclair/typebox` only | Shared by all layers, zero coupling |
+| `schema.ts` | `typebox` only | Shared by all layers, zero coupling |
 | `component.ts` | `@mariozechner/pi-tui`, `schema.ts` | Pure component, testable without pi runtime |
 | `index.ts` | `@mariozechner/pi-coding-agent`, `component.ts`, `schema.ts` | Extension wiring only |
 | `tests/component.test.ts` | `component.ts`, `schema.ts`, `vitest` | Never imports `index.ts` |
@@ -56,12 +56,12 @@ pi-askuserquestion/
   "peerDependencies": {
     "@mariozechner/pi-coding-agent": "*",
     "@mariozechner/pi-tui": "*",
-    "@sinclair/typebox": "*"
+    "typebox": "*"
   }
 }
 ```
 
-`@mariozechner/pi-coding-agent`, `@mariozechner/pi-tui`, and `@sinclair/typebox` are all bundled
+`@mariozechner/pi-coding-agent`, `@mariozechner/pi-tui`, and `typebox` are all bundled
 with pi and declared as `peerDependencies` — they must not appear in `dependencies`.
 
 ---
@@ -71,7 +71,7 @@ with pi and declared as `peerDependencies` — they must not appear in `dependen
 Single source of truth for all data shapes. No pi or tui imports.
 
 ```typescript
-import { Type, type Static } from "@sinclair/typebox";
+import { Type, type Static } from "typebox";
 
 // ── Input (what the LLM sends) ────────────────────────────────────────────────
 
@@ -419,7 +419,7 @@ Called from:
 
 ```typescript
 import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
-import { Type } from "@sinclair/typebox";
+import { Type } from "typebox";
 import { InputSchema, ResultSchema, type Result } from "./schema.ts";
 import { AskUserQuestionComponent } from "./component.ts";
 
