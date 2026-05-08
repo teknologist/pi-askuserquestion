@@ -1,5 +1,5 @@
-import type { Theme } from "@mariozechner/pi-coding-agent";
-import { Key, matchesKey } from "@mariozechner/pi-tui";
+import type { Theme } from "@earendil-works/pi-coding-agent";
+import { Key, matchesKey } from "@earendil-works/pi-tui";
 import { Type } from "typebox";
 import { describe, expect, it } from "vitest";
 import { AskUserQuestionComponent, type TUILike } from "../src/component.ts";

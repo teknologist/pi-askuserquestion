@@ -29,8 +29,8 @@ pi-askuserquestion/
 | File | Imports | Reason |
 |------|---------|--------|
 | `schema.ts` | `typebox` only | Shared by all layers, zero coupling |
-| `component.ts` | `@mariozechner/pi-tui`, `schema.ts` | Pure component, testable without pi runtime |
-| `index.ts` | `@mariozechner/pi-coding-agent`, `component.ts`, `schema.ts` | Extension wiring only |
+| `component.ts` | `@earendil-works/pi-tui`, `schema.ts` | Pure component, testable without pi runtime |
+| `index.ts` | `@earendil-works/pi-coding-agent`, `component.ts`, `schema.ts` | Extension wiring only |
 | `tests/component.test.ts` | `component.ts`, `schema.ts`, `vitest` | Never imports `index.ts` |
 
 ---
@@ -54,14 +54,14 @@ pi-askuserquestion/
     "@types/node": "^22.0.0"
   },
   "peerDependencies": {
-    "@mariozechner/pi-coding-agent": "*",
-    "@mariozechner/pi-tui": "*",
+    "@earendil-works/pi-coding-agent": "*",
+    "@earendil-works/pi-tui": "*",
     "typebox": "*"
   }
 }
 ```
 
-`@mariozechner/pi-coding-agent`, `@mariozechner/pi-tui`, and `typebox` are all bundled
+`@earendil-works/pi-coding-agent`, `@earendil-works/pi-tui`, and `typebox` are all bundled
 with pi and declared as `peerDependencies` — they must not appear in `dependencies`.
 
 ---
@@ -159,11 +159,11 @@ import {
   type TUI,
   visibleWidth,
   wrapTextWithAnsi,
-} from "@mariozechner/pi-tui";
+} from "@earendil-works/pi-tui";
 import type { Question, Result } from "./schema.ts";
 ```
 
-No `@mariozechner/pi-coding-agent` import. The `Theme` type is passed in at construction time.
+No `@earendil-works/pi-coding-agent` import. The `Theme` type is passed in at construction time.
 
 ### TUI stub interface
 
@@ -418,7 +418,7 @@ Called from:
 ## src/index.ts
 
 ```typescript
-import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
+import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import { Type } from "typebox";
 import { InputSchema, ResultSchema, type Result } from "./schema.ts";
 import { AskUserQuestionComponent } from "./component.ts";
@@ -865,5 +865,5 @@ function make(
 | `ctx.ui.custom()` integration | Requires live pi runtime |
 | `Editor` keystroke fidelity | `editor.disableSubmit = true` and onChange tested indirectly via state |
 | Tab bar visual styling (colors) | mockTheme strips colors — structural correctness tested, not aesthetics |
-| `renderCall` / `renderResult` | Requires `Text` from `@mariozechner/pi-tui` and real theme — tested visually |
+| `renderCall` / `renderResult` | Requires `Text` from `@earendil-works/pi-tui` and real theme — tested visually |
 | LLM tool call round-trip | Tested via end-to-end `pi -e ./src/index.ts` |
